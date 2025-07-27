@@ -1,0 +1,104 @@
+Notebook[{Cell[
+BoxData[""],"Input",ExpressionUUID -> "ce38eed8-b445-44e3-bdee-8c451f5a6f03"],Cell[
+BoxData[
+{RowBox[{RowBox[{"(*"," ",RowBox[{"Getting"," ","the"," ","data"}]," ","*)"}],"\n","\n",RowBox[
+{RowBox[{"data"," ","="," ",RowBox[{"Import","[",RowBox[{"\"Published/Cropclimatefood.csv\"",","," ","\"Dataset\""}],"]"}]}],";"}]," "}],RowBox[
+{"\n","\n","\n"}],RowBox[{RowBox[{"(*",RowBox[{"country"," ","list"}]," ","*)"}],"\n",RowBox[
+{RowBox[{"countries"," ","="," ",RowBox[{"Normal","@",RowBox[{"DeleteDuplicates","[",RowBox[
+{"data","[",RowBox[{"[",RowBox[{"All",","," ","\"Country\""}],"]"}],"]"}],"]"}]}]}],";"}]}],RowBox[
+{"\n","\n","\n","\n"}],RowBox[{RowBox[{"(*"," ",RowBox[{"range"," ","of"," ","parameters"}],"*)"}],"\n",RowBox[
+{RowBox[{"climateParams"," ","="," ",RowBox[{"{",RowBox[{"\"Mean Temp (C)\"",","," ","\"Extreme Heat Days (>35C)\"",","," ","\"Heavy Rain Days (>20mm)\"",","," ","\"Consecutive Dry Days\""}],"}"}]}],";"}]}],RowBox[
+{"\n","\n","\n","\n"}],RowBox[{RowBox[{"climateRanges"," ","="," ",RowBox[{"<|","\n","   ",RowBox[
+{RowBox[{"\"Mean Temp (C)\""," ","\[Rule]"," ",RowBox[{"{",RowBox[{RowBox[{"-","5"}],","," ","5"}],"}"}]}],",","\n","   ",RowBox[
+{"\"Extreme Heat Days (>35C)\""," ","\[Rule]"," ",RowBox[{"{",RowBox[{RowBox[{"-","50"}],","," ","50"}],"}"}]}],",","\n","   ",RowBox[
+{"\"Heavy Rain Days (>20mm)\""," ","\[Rule]"," ",RowBox[{"{",RowBox[{RowBox[{"-","20"}],","," ","20"}],"}"}]}],",","\n","   ",RowBox[
+{"\"Consecutive Dry Days\""," ","\[Rule]"," ",RowBox[{"{",RowBox[{RowBox[{"-","100"}],","," ","100"}],"}"}]}]}],"\n","|>"}]}],";"}],RowBox[
+{"\n","\n","\n","\n"}],RowBox[{RowBox[{"(*",RowBox[{"colour"," ","mapping"}],"*)"}],"\n",RowBox[
+{RowBox[{"cropParamsList"," ","="," ",RowBox[{"{","\n","   ",RowBox[{"\"Cereal Yield (Kg/Ha)\"",",","\n","   ","\"Dietary Supply Adequacy (%)\"",",","\n","   ","\"Undernourishment (%)\""}],"\n","}"}]}],";"}]}],RowBox[
+{"\n","\n","\n","\n"}],RowBox[{RowBox[{"cropColors"," ","="," ",RowBox[{"<|","\n","   ",RowBox[
+{RowBox[{"\"Cereal Yield (Kg/Ha)\""," ","\[Rule]"," ","Blue"}],",","\n","   ",RowBox[
+{"\"Dietary Supply Adequacy (%)\""," ","\[Rule]"," ","Green"}],",","\n","   ",RowBox[
+{"\"Undernourishment (%)\""," ","\[Rule]"," ","Purple"}]}],"\n","|>"}]}],";"}],RowBox[
+{"\n","\n","\n","\n"}],RowBox[{RowBox[{"Manipulate","[","\n"," ",RowBox[{RowBox[{"Module","[",RowBox[
+{RowBox[{"{",RowBox[{"countryData",","," ","cleanData",","," ","years",","," ","cropData",","," ","climateData",","," ","cropColor",","," ","corr",","," ","S",","," ","deltaClimate",","," ","climateAdjusted",","," ","predictedCrop",","," ","climateRescaled",","," ","yearTicks",","," ","scenarioValue"}],"}"}],",","\n","  ","\n","  ",RowBox[
+{"(*"," ",RowBox[{"scenario"," ","change"," ","variable"}],"*)"}],"\n","  ",RowBox[
+{RowBox[{"scenarioValue"," ","="," ",RowBox[{"Which","[","\n","    ",RowBox[{RowBox[
+{"selectedClimateParam"," ","=="," ","\"Mean Temp (C)\""}],","," ","tempChange",",","\n","    ",RowBox[
+{"selectedClimateParam"," ","=="," ","\"Extreme Heat Days (>35C)\""}],","," ","heatDaysChange",",","\n","    ",RowBox[
+{"selectedClimateParam"," ","=="," ","\"Heavy Rain Days (>20mm)\""}],","," ","rainDaysChange",",","\n","    ",RowBox[
+{"selectedClimateParam"," ","=="," ","\"Consecutive Dry Days\""}],","," ","dryDaysChange"}],"\n","  ","]"}]}],";","\n","  ","\n","  ",RowBox[
+{"deltaClimate"," ","="," ","scenarioValue"}],";","\n","  ","\n","  ",RowBox[{"(*"," ",RowBox[
+{"country"," ","selection"}],"*)"}],"\n","  ",RowBox[{"countryData"," ","="," ",RowBox[
+{"Select","[",RowBox[{"data",","," ",RowBox[{RowBox[{RowBox[{"#","[","\"Country\"","]"}]," ","=="," ","selectedCountry"}]," ","&"}]}],"]"}]}],";","\n","  ","\n","  ",RowBox[
+{"(*"," ",RowBox[{"cleaning"," ","data"}]," ","*)"}],"\n","  ",RowBox[{"cleanData"," ","="," ",RowBox[
+{"Select","[",RowBox[{"countryData",","," ",RowBox[{RowBox[{"And","[","\n","     ",RowBox[
+{RowBox[{"NumberQ","[",RowBox[{"#","[","\"Year\"","]"}],"]"}],",","\n","     ",RowBox[
+{"NumberQ","[",RowBox[{"#","[","\"Mean Temp (C)\"","]"}],"]"}],",","\n","     ",RowBox[
+{"NumberQ","[",RowBox[{"#","[","\"Extreme Heat Days (>35C)\"","]"}],"]"}],",","\n","     ",RowBox[
+{"NumberQ","[",RowBox[{"#","[","\"Heavy Rain Days (>20mm)\"","]"}],"]"}],",","\n","     ",RowBox[
+{"NumberQ","[",RowBox[{"#","[","\"Consecutive Dry Days\"","]"}],"]"}],",","\n","     ",RowBox[
+{"NumberQ","[",RowBox[{"#","[","\"Cereal Yield (Kg/Ha)\"","]"}],"]"}],",","\n","     ",RowBox[
+{"NumberQ","[",RowBox[{"#","[","\"Dietary Supply Adequacy (%)\"","]"}],"]"}],",","\n","     ",RowBox[
+{"NumberQ","[",RowBox[{"#","[","\"Undernourishment (%)\"","]"}],"]"}]}],"\n","  ","]"}],"&"}]}],"]"}]}],";","\n","  ","\n","  ",RowBox[
+{"If","[",RowBox[{RowBox[{RowBox[{"Length","[","cleanData","]"}]," ","<"," ","3"}],","," ","\n","   ",RowBox[
+{"Return","[",RowBox[{"Style","[",RowBox[{"\"Not enough data for this country.\"",","," ","Red",","," ","Bold",","," ","16"}],"]"}],"]"}]}],"\n","  ","]"}],";","\n","  ","\n","  ",RowBox[
+{"years"," ","="," ",RowBox[{"Normal","@",RowBox[{"cleanData","[",RowBox[{"[",RowBox[
+{"All",","," ","\"Year\""}],"]"}],"]"}]}]}],";","\n","  ",RowBox[{"cropData"," ","="," ",RowBox[
+{"Normal","@",RowBox[{"cleanData","[",RowBox[{"[",RowBox[{"All",","," ","selectedCropParam"}],"]"}],"]"}]}]}],";","\n","  ",RowBox[
+{"climateData"," ","="," ",RowBox[{"Normal","@",RowBox[{"cleanData","[",RowBox[{"[",RowBox[
+{"All",","," ","selectedClimateParam"}],"]"}],"]"}]}]}],";","\n","  ",RowBox[{"cropColor"," ","="," ",RowBox[
+{"cropColors","[","selectedCropParam","]"}]}],";","\n","  ","\n","  ",RowBox[{"(*"," ",RowBox[
+{"calculating"," ","sensitivity"}],"*)"}],"\n","  ",RowBox[{"corr"," ","="," ",RowBox[
+{"Correlation","[",RowBox[{"cropData",","," ","climateData"}],"]"}]}],";","\n","  ",RowBox[
+{"S"," ","="," ",RowBox[{"corr"," ","*"," ",RowBox[{"(",RowBox[{RowBox[{"StandardDeviation","[","cropData","]"}],"/",RowBox[
+{"StandardDeviation","[","climateData","]"}]}],")"}]}]}],";","\n","  ","\n","  ",RowBox[
+{"(*"," ",RowBox[{"changing"," ","the"," ","values"}]," ","*)"}],"\n","  ",RowBox[
+{"climateAdjusted"," ","="," ",RowBox[{"climateData"," ","+"," ","deltaClimate"}]}],";","\n","  ",RowBox[
+{"predictedCrop"," ","="," ",RowBox[{"cropData"," ","+"," ",RowBox[{RowBox[{"(",RowBox[
+{"climateAdjusted"," ","-"," ","climateData"}],")"}]," ","*"," ","S"}]}]}],";","\n","  ","\n","  ",RowBox[
+{"(*"," ",RowBox[{"scale"," ","adjustment"}],"*)"}],"\n","  ",RowBox[{"climateRescaled"," ","="," ",RowBox[
+{"Rescale","[",RowBox[{"climateData",","," ",RowBox[{"{",RowBox[{RowBox[{"Min","[","climateData","]"}],","," ",RowBox[
+{"Max","[","climateData","]"}]}],"}"}],","," ",RowBox[{"{",RowBox[{RowBox[{"Min","[","cropData","]"}],","," ",RowBox[
+{"Max","[","cropData","]"}]}],"}"}]}],"]"}]}],";","\n","  ","\n","  ",RowBox[{"(*",RowBox[
+{RowBox[{"clean"," ","label"," ","for"," ","x"}],"-","axis"}]," ","*)"}],"\n","  ",RowBox[
+{"yearTicks"," ","="," ",RowBox[{"Select","[",RowBox[{RowBox[{"Map","[",RowBox[{RowBox[
+{RowBox[{"{",RowBox[{"#",","," ",RowBox[{"ToString","[","#","]"}]}],"}"}]," ","&"}],","," ","years"}],"]"}],","," ",RowBox[
+{RowBox[{RowBox[{"Mod","[",RowBox[{RowBox[{"#","[",RowBox[{"[","1","]"}],"]"}],","," ","5"}],"]"}]," ","=="," ","0"}]," ","&"}]}],"]"}]}],";","\n","  ","\n","  ",RowBox[
+{"(*"," ",RowBox[{"graph"," ","plotting"}],"*)"}],"\n","  ",RowBox[{"ListLinePlot","[","\n","    ",RowBox[
+{RowBox[{"{","\n","      ",RowBox[{RowBox[{"Transpose","[",RowBox[{"{",RowBox[{"years",","," ","cropData"}],"}"}],"]"}],",","\n","      ",RowBox[
+{"Transpose","[",RowBox[{"{",RowBox[{"years",","," ","climateRescaled"}],"}"}],"]"}],",","\n","      ",RowBox[
+{"Transpose","[",RowBox[{"{",RowBox[{"years",","," ","predictedCrop"}],"}"}],"]"}]}],"\n","    ","}"}],",","\n","    ",RowBox[
+{"PlotStyle"," ","\[Rule]"," ",RowBox[{"{","\n","      ",RowBox[{"cropColor",","," ","\n","      ",RowBox[
+{"Directive","[",RowBox[{"Red",","," ","Dashed"}],"]"}],","," ","\n","      ",RowBox[
+{"Directive","[",RowBox[{"Black",","," ","Dotted",","," ","Thick"}],"]"}]}],"\n","    ","}"}]}],",","\n","    ",RowBox[
+{"Frame"," ","\[Rule]"," ","True"}],",","\n","    ",RowBox[{"FrameLabel"," ","\[Rule]"," ",RowBox[
+{"{",RowBox[{RowBox[{"{",RowBox[{"\"Crop Parameter\"",","," ","selectedClimateParam"}],"}"}],","," ",RowBox[
+{"{",RowBox[{"\"Year\"",","," ","None"}],"}"}]}],"}"}]}],",","\n","    ",RowBox[{"FrameTicks"," ","\[Rule]"," ",RowBox[
+{"{","\n","      ",RowBox[{RowBox[{"{",RowBox[{"Automatic",","," ","None"}],"}"}],",","\n","      ",RowBox[
+{"{",RowBox[{"yearTicks",","," ","None"}],"}"}]}],"\n","    ","}"}]}],",","\n","    ",RowBox[
+{"PlotLegends"," ","\[Rule]"," ",RowBox[{"{","\n","      ",RowBox[{RowBox[{"selectedCropParam"," ","<>"," ","\" (Actual)\""}],",","\n","      ",RowBox[
+{"selectedClimateParam"," ","<>"," ","\" (Right Y-axis, Scaled)\""}],",","\n","      ",RowBox[
+{"\"Simulated \""," ","<>"," ","selectedCropParam"," ","<>"," ","\" (Scenario)\""}]}],"\n","    ","}"}]}],",","\n","    ",RowBox[
+{"PlotLabel"," ","\[Rule]"," ",RowBox[{"Row","[",RowBox[{"{","\n","      ",RowBox[
+{RowBox[{"Style","[",RowBox[{RowBox[{"selectedCountry"," ","<>"," ","\" | \""}],","," ","Bold",","," ","14"}],"]"}],",","\n","      ",RowBox[
+{"Style","[",RowBox[{RowBox[{"selectedCropParam"," ","<>"," ","\" vs \""," ","<>"," ","selectedClimateParam"}],","," ","Bold",","," ","13"}],"]"}],",","\n","      ","\"   \"",",","\n","      ",RowBox[
+{"Style","[",RowBox[{RowBox[{"\"r = \""," ","<>"," ",RowBox[{"ToString","[",RowBox[
+{"NumberForm","[",RowBox[{"corr",","," ",RowBox[{"{",RowBox[{"3",","," ","2"}],"}"}]}],"]"}],"]"}]}],","," ","Purple",","," ","12"}],"]"}]}],"\n","    ","}"}],"]"}]}],",","\n","    ",RowBox[
+{"ImageSize"," ","\[Rule]"," ","600"}],",","\n","    ",RowBox[{"Joined"," ","\[Rule]"," ","True"}],",","\n","    ",RowBox[
+{"PlotMarkers"," ","\[Rule]"," ","Automatic"}]}],"\n","  ","]"}]}]}],"\n","  ","\n"," ","]"}],",","\n"," ","\n"," ",RowBox[
+{"(*"," ",RowBox[{"user"," ","inputs"," ","for"," ","graph"}],"*)"}],"\n"," ",RowBox[
+{"{",RowBox[{RowBox[{"{",RowBox[{"selectedCountry",","," ","\"India\"",","," ","\"Select Country\""}],"}"}],","," ","countries"}],"}"}],",","\n"," ",RowBox[
+{"{",RowBox[{RowBox[{"{",RowBox[{"selectedClimateParam",","," ","\"Mean Temp (C)\"",","," ","\"Climate Parameter\""}],"}"}],","," ","climateParams"}],"}"}],",","\n"," ",RowBox[
+{"{",RowBox[{RowBox[{"{",RowBox[{"selectedCropParam",","," ","\"Cereal Yield (Kg/Ha)\"",","," ","\"Food Security Parameter\""}],"}"}],","," ","cropParamsList"}],"}"}],",","\n"," ","\n"," ",RowBox[
+{"(*"," ",RowBox[{"user"," ","input"," ","for"," ","sensitivity"}],"*)"}],"\n"," ",RowBox[
+{"{",RowBox[{RowBox[{"{",RowBox[{"tempChange",","," ","0",","," ","\"Temperature Change (\[Degree]C)\""}],"}"}],","," ",RowBox[
+{"-","5"}],","," ","5",","," ",RowBox[{"Appearance"," ","\[Rule]"," ","\"Labeled\""}]}],"}"}],",","\n"," ",RowBox[
+{"{",RowBox[{RowBox[{"{",RowBox[{"heatDaysChange",","," ","0",","," ","\"Extreme Heat Days Change\""}],"}"}],","," ",RowBox[
+{"-","50"}],","," ","50",","," ",RowBox[{"Appearance"," ","\[Rule]"," ","\"Labeled\""}]}],"}"}],",","\n"," ",RowBox[
+{"{",RowBox[{RowBox[{"{",RowBox[{"rainDaysChange",","," ","0",","," ","\"Heavy Rain Days Change\""}],"}"}],","," ",RowBox[
+{"-","20"}],","," ","20",","," ",RowBox[{"Appearance"," ","\[Rule]"," ","\"Labeled\""}]}],"}"}],",","\n"," ",RowBox[
+{"{",RowBox[{RowBox[{"{",RowBox[{"dryDaysChange",","," ","0",","," ","\"Consecutive Dry Days Change\""}],"}"}],","," ",RowBox[
+{"-","100"}],","," ","100",","," ",RowBox[{"Appearance"," ","\[Rule]"," ","\"Labeled\""}]}],"}"}]}],"\n"," ","\n","]"}],"\n"}]}],
+"Input",ExpressionUUID -> "b854573c-780c-4ab9-84cd-43067efef143"]},StyleDefinitions -> "Default.nb",
+FrontEndVersion -> "14.2 for Wolfram Cloud 1.72 (April 27, 2025)",CloudRenderingMethod -> "InteractiveBoxes",
+ExpressionUUID -> "56f3e85b-241b-435f-9e54-8f58bd4e8200"]
